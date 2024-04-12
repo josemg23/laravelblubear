@@ -17,8 +17,8 @@ class DigimonController extends Controller
         $url = "https://digi-api.com/api/v1/digimon?pageSize=10&page={$currentPage}";
         try {
             $response = Http::timeout(10)->get($url);
-            if ($response->getStatusCode() >= 400) {
-                throw new \Exception('API request failed with status code: ' . $response->getStatusCode());
+            if (empty($response->json()) || !array_key_exists('content', $response->json())) {
+                throw new \Exception('API request failed: Missing or empty content');
             }
             $digimons = $response->json()['content'];
             $paginacion = $response->json()['pageable'];
