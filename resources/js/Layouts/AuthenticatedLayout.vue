@@ -119,7 +119,7 @@ const showingNavigationDropdown = ref(false);
                             Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('digimon.view')" :active="route().current('digimon.view')">
-                            Daigimons
+                            Digimons
                         </ResponsiveNavLink>
                     </div>
 
