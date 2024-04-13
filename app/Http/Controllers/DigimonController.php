@@ -12,7 +12,7 @@ class DigimonController extends Controller
 
     public function viewListDigimon(Request $request)
     {
-        $currentPage = isset($request->page) ? $request->page : 0;
+        $currentPage = isset($request->page) ? $request->page : 1;
 
         $url = "https://digi-api.com/api/v1/digimon?pageSize=10&page={$currentPage}";
         try {

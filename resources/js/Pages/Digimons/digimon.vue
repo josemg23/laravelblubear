@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
-import vueTailwindPaginationUmd from '@ocrv/vue-tailwind-pagination';
+import VueTailwindPagination from '@ocrv/vue-tailwind-pagination'
 import { Head, useForm } from '@inertiajs/vue3';
 import { nextTick, ref} from 'vue';
 import '@ocrv/vue-tailwind-pagination/styles'
@@ -69,9 +69,9 @@ const closeModal = () => {
 
                 </div>
                 <div class="bg-white grid v-screen place-items-center">
-                    <vueTailwindPaginationUmd :current="paginacion.currentPage" :total="paginacion.totalPages"
+                    <VueTailwindPagination :current="paginacion.currentPage" :total="paginacion.totalPages"
                         :per-page="paginacion.elementsOnPage" @page-changed="onPageClik($event)">
-                    </vueTailwindPaginationUmd>
+                    </VueTailwindPagination>
                     <br />
                 </div>
             </div>
