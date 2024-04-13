@@ -167,4 +167,9 @@ const closeModal = () => {
     float: right;
     /* Float the button to the right */
 }
+@media (max-width: 768px) {
+  .tarjeta-digimon {
+    width: 100%; /* Make cards full-width on small screens */
+  }
+}
 </style>
