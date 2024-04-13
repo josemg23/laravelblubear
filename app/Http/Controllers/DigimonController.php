@@ -42,7 +42,7 @@ class DigimonController extends Controller
                 throw new \Exception('API request failed with status code: ' . $response->getStatusCode());
             }
             $digimonDetail = $response->json();
-            return Inertia::render('Digimons/digimon', ['data' =>   $digimonDetail]);
+            return response()->json($digimonDetail);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

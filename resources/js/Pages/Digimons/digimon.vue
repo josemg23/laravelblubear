@@ -4,15 +4,18 @@ import Modal from '@/Components/Modal.vue';
 import vueTailwindPaginationUmd from '@ocrv/vue-tailwind-pagination';
 import { Head, useForm } from '@inertiajs/vue3';
 import { nextTick, ref, onMounted } from 'vue';
+import axios from 'axios';
 
 const nameInput = ref(null);
 const modal = ref(false);
-const title = ref();
-const id = ref('');
+const image = ref('');
+const detalle = ref({});
+
 
 const props = defineProps({
     digimonslist: { type: Object },
     paginacion: { type: Object },
+    detalle: { type: Object },
 })
 
 const formPage = useForm({});
@@ -20,45 +23,28 @@ const onPageClik = (event) => {
     formPage.get(route('digimon.view', { page: event }))
 }
 
-const openModal = (item) => {
+const openModal = async (item) => {
+
     if (nameInput.value) {
         nextTick(() => nameInput.value.focus());
     }
     modal.value = true;
-    id.value = item.ids;
-    title.value = item.name;
-
+    image.value = item.image;
+    detalle.value = await getData(item.id);
+    
 };
+
+const getData = async (id) => {
+    const response = await axios.get(route('digimons.detail.list', { id }));
+    // const response = await axios.get(`https://www.digi-api.com/api/v1/digimon/` + id);
+    return response.data
+};
+
 const closeModal = () => {
     modal.value = false;
 };
-
-</script>
-<script>
-export default {
-    data() {
-        return {
-            digimons: [],
-        };
-    },
-    mounted() {
-        this.getDigimonsList();
-    },
-    methods: {
-        getDigimonsList() {
-            let self = this;
-            self.digimons = this.digimonslist.data;
-        },
-
-        selectItemsContratos(id) {
-            const response = axios.get(this.form.get(route('digimons.detail.list', { id: id })));
-            console.log(response);
-        }
-    },
-}
 </script>
 <template>
-
     <Head title="Digimons" />
     <AuthenticatedLayout>
         <template #header>
@@ -71,7 +57,7 @@ export default {
                         <div class="rejilla-digimon grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div v-for="(item, i) in digimonslist" :key="i"
                                 class="tarjeta-digimon bg-white rounded-lg shadow-md overflow-hidden">
-                                <img :src="item.image" alt="Imagen" @click="openModal(item)"
+                                <img :src="item.image" alt="Imagen" @click="$event => openModal(item)"
                                     class="w-full h-48 object-cover" />
                                 <div class="nombre-digimon px-4 py-2 text-center text-lg font-bold text-gray-800">
                                     {{ item.name }}
@@ -89,16 +75,49 @@ export default {
             </div>
         </div>
         <Modal :show="modal" @close="closeModal">
-            <h2 class="p-3 text-lg font.mediun text-hray-900">{{ title }}</h2>
-            <div class="col-md-12 text-center">
-                <!-- <img :url="image" alt="Imagen" class="w-full h-48 object-cover" style="width:200px; height:200px" /> -->
+            <div class="flex flex-col items-center p-3 bg-white rounded shadow-md max-w-2xl">
+                <h2 class="p-3 text-lg font.mediun text-hray-900">{{ detalle.id }}</h2>
+                <h2 class="p-3 text-lg font.mediun text-hray-900">{{ detalle.name }}</h2>
+                <div class="w-full flex flex-col items-center">
+                    <img :src="image" alt="Imagen" style="width:200px; height:200px" class="w-full h-48 object-cover" />
+                </div>
+                <div class="flex flex-wrap justify-center gap-0">
+                    <div class="w-full md:w-1/2 text-center">
+                        <h3 class="p-3 text-lg font.mediun text-hray-900">Level</h3>
+                        <div v-for="(value, i) in detalle.levels" :key="i">
+                            <p class="text-sm mb-0">{{ value.level }}</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 text-center">
+                        <h3 class="p-3 text-lg font.mediun text-hray-900">Attribute</h3>
+                        <div v-for="(value, i) in detalle.attributes" :key="i">
+                            <p class="text-sm mb-0">{{ value.attribute }}</p>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="w-full md:w-1/2 text-center">
+                        <h3 class="p-3 text-lg font.mediun text-hray-900">Type</h3>
+                        <div v-for="(value, i) in detalle.types" :key="i">
+                            <p class="text-sm mb-2">{{ value.type }}</p>
+                        </div>
+                    </div>
+
+                    <div class="w-full text-center">
+                        <h3 class="p-3 text-lg font.mediun text-hray-900">Fields</h3>
+                        <div v-for="(value, i) in detalle.fields" :key="i">
+                            <img :src="value.image" fluid alt="Responsive image"
+                                class="mx-auto h-20 w-20 rounded-full" />
+
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                
             </div>
 
         </Modal>
     </AuthenticatedLayout>
 </template>
-
-
 <style>
 .content {
     /* Estilos para el contenido */
