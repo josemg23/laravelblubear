@@ -3,7 +3,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
 import vueTailwindPaginationUmd from '@ocrv/vue-tailwind-pagination';
 import { Head, useForm } from '@inertiajs/vue3';
-import { nextTick, ref, onMounted } from 'vue';
+import { nextTick, ref} from 'vue';
+import '@ocrv/vue-tailwind-pagination/styles'
 import axios from 'axios';
 
 const nameInput = ref(null);
@@ -71,6 +72,7 @@ const closeModal = () => {
                     <vueTailwindPaginationUmd :current="paginacion.currentPage" :total="paginacion.totalPages"
                         :per-page="paginacion.elementsOnPage" @page-changed="onPageClik($event)">
                     </vueTailwindPaginationUmd>
+                    <br />
                 </div>
             </div>
         </div>
