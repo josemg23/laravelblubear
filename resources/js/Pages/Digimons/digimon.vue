@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
 import VueTailwindPagination from '@ocrv/vue-tailwind-pagination'
 import { Head, useForm } from '@inertiajs/vue3';
-import { nextTick, ref} from 'vue';
+import { nextTick, ref } from 'vue';
 import '@ocrv/vue-tailwind-pagination/styles'
 import axios from 'axios';
 
@@ -32,7 +32,7 @@ const openModal = async (item) => {
     modal.value = true;
     image.value = item.image;
     detalle.value = await getData(item.id);
-    
+
 };
 
 const getData = async (id) => {
@@ -46,6 +46,7 @@ const closeModal = () => {
 };
 </script>
 <template>
+
     <Head title="Digimons" />
     <AuthenticatedLayout>
         <template #header>
@@ -55,9 +56,9 @@ const closeModal = () => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white grid v-screen place-items-center">
                     <div class="p-6 text-gray-900">
-                        <div class="rejilla-digimon grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="rejilla-digimon grid gap-4">
                             <div v-for="(item, i) in digimonslist" :key="i"
-                                class="tarjeta-digimon bg-white rounded-lg shadow-md overflow-hidden">
+                                class="tarjeta-digimon bg-white rounded-lg shadow-md overflow-hidden sm:w-full md:w-1/2 lg:w-1/3">
                                 <img :src="item.image" alt="Imagen" @click="$event => openModal(item)"
                                     class="w-full h-48 object-cover" />
                                 <div class="nombre-digimon px-4 py-2 text-center text-lg font-bold text-gray-800">
@@ -65,19 +66,17 @@ const closeModal = () => {
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="mt-4 flex justify-center items-center gap-2">
+                            <VueTailwindPagination :current="paginacion.currentPage" :total="paginacion.totalPages"
+                                :per-page="paginacion.elementsOnPage" @page-changed="onPageClik($event)" />
+                        </div>
                     </div>
-
-                </div>
-                <div class="bg-white grid v-screen place-items-center">
-                    <VueTailwindPagination :current="paginacion.currentPage" :total="paginacion.totalPages"
-                        :per-page="paginacion.elementsOnPage" @page-changed="onPageClik($event)">
-                    </VueTailwindPagination>
-                    <br />
                 </div>
             </div>
         </div>
         <Modal :show="modal" @close="closeModal">
-            <div class="flex flex-col items-center p-3 bg-white rounded shadow-md max-w-2xl">
+            <div class="flex flex-col items-center p-3 bg-white rounded shadow-md max-w-2xl sm:w-full">
                 <h2 class="p-3 text-lg font.mediun text-hray-900">{{ detalle.id }}</h2>
                 <h2 class="p-3 text-lg font.mediun text-hray-900">{{ detalle.name }}</h2>
                 <div class="w-full flex flex-col items-center">
@@ -109,14 +108,11 @@ const closeModal = () => {
                         <div v-for="(value, i) in detalle.fields" :key="i">
                             <img :src="value.image" fluid alt="Responsive image"
                                 class="mx-auto h-20 w-20 rounded-full" />
-
                             <br />
                         </div>
                     </div>
                 </div>
-                
             </div>
-
         </Modal>
     </AuthenticatedLayout>
 </template>
