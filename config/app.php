@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://localhost'),
+    'url' => env('APP_URL', 'https://laravel-app-knmy9.ondigitalocean.app/'),
 
     'asset_url' => env('ASSET_URL', '/'),
 
